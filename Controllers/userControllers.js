@@ -1,5 +1,6 @@
 const Users = require('../Models/usersModel')
-const utils = require('../Configs/utils')
+const utils = require('../Configs/utils');
+
 
 
 
@@ -51,4 +52,58 @@ exports.createAccount = async (req, res) => {
 
     }
 
+}
+
+
+//LOGIN
+
+exports.login = async(req,res)=>{
+    const  {email,phoneNumber,password} = req.body
+ //1.user should  login with email or phone number and password
+    if(email && password){
+        let foundUser
+        try {
+             foundUser = await Users.findOne({email})
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    else if(phoneNumber && password){
+        try {
+            foundUser = await Users.findOne({phoneNumber})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    else{
+        res.status(400).json({
+            status:'Failed',
+            message:'Please login'
+        })
+    }
+//2.verification of password
+if(foundUser){
+    try {
+        const hashedPassword = foundUser.password
+        if (await utils.passwordVerification(password, hashedPassword)){
+//.3 generate a token
+           const token = await utils.gentoken(foundUser._id)
+           res.status(200).json({
+               foundUser,
+               token,
+               message:'Login Successfully'
+           })
+        }
+        else{
+            res.status(400).json({
+                status:'failed',
+                message:'Incorect Password'
+            })
+        }
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
 }

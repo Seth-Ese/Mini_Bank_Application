@@ -30,3 +30,10 @@ exports.encryptPassword = async (password)=>{
     return passwordHashed = await bcrypt.hash(password,12)
 }
 
+exports.passwordVerification = async (password,passwordHashed)=>{
+    return await bcrypt.compare(password, passwordHashed)
+}
+
+exports.gentoken = async (_id)=>{
+    return JWT.sign({ _id }, process.env.SECRET, { expiresIn: process.env.EXPIRES_IN})
+}
