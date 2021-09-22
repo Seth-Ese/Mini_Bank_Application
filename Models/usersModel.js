@@ -27,6 +27,11 @@ const userSchema = mongoose.Schema({
         type:String,
         required:false
     },
+    accountBalance:{
+        type:Number,
+        required:false,
+        default:0
+    },
     create_date: {
         type: Date,
         default:Date.now()
