@@ -21,7 +21,12 @@ const adminSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    dateCreated: {
+    admin:{
+        type: mongoose.Schema.Types.ObjectId,
+         ref: 'Admin',
+         required: true
+    },
+    create_date: {
         type: Date,
         default:Date.now()
     }
